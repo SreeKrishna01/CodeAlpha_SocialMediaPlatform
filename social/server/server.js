@@ -17,7 +17,10 @@ const app = express();
 
 connectDB();
 
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || '*' }));
+app.use(cors({
+  origin: 'https://kek-start.vercel.app',
+  credentials: true
+}));
 app.use(express.json({ limit: '300mb' }));
 app.use(morgan('dev'));
 app.use('/media', express.static(path.join(__dirname, 'media')));
