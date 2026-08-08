@@ -138,7 +138,10 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
             {isVideo ? (
               <AutoPlayVideo src={images[imgIndex]} controls className="post-video" adjust={adjust} />
             ) : (
-              <img src={images[imgIndex]} alt="" />
+              <img
+  src={`${import.meta.env.VITE_API_URL}${images[imgIndex]}`}
+  alt=""
+/>
             )}
             {images.length > 1 && (
               <div className="media-nav">
