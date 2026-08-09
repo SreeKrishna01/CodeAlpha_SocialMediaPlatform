@@ -166,7 +166,6 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    setLoading(true);
     api.fetchStories().then(({ stories }) => {
       setHasStory(stories.some((s) => String(s.author?._id || s.author) === String(profile?.id)));
     }).catch(() => {});
