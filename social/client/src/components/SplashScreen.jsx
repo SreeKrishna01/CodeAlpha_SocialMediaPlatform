@@ -17,7 +17,7 @@ export default function SplashScreen({ onComplete }) {
         <div className={`splash-logo ${phase >= 1 ? 'show' : ''}`}>
           <img
             className="splash-logo-img"
-            src="https://i.pinimg.com/originals/8c/79/0e/8c790e231ba893b4408f79f8f5dc95a6.jpg"
+            src="https://yt3.googleusercontent.com/ytc/AIdro_nC2ZJ937Vbv94eqVs_1k-jncgK8cAl1NR_Td2Anc6Kqg=s900-c-k-c0x00ffffff-no-rj"
             alt="Kek Start"
           />
         </div>
