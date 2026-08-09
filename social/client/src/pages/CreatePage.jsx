@@ -82,14 +82,13 @@ export default function CreatePage() {
     setError('');
     try {
       await api.createPost({
-        caption: caption.trim(),
-        images,
-        ratios,
-        adjusts,
-        mediaTypes,
-        location: location.trim(),
-      });
-      navigate('/');
+  caption: caption.trim(),
+  images,
+  ratios,
+  adjusts,
+  mediaTypes,
+  location: location.trim(),
+});
     } catch (err) {
       setError(err?.response?.data?.message || 'Failed to create post');
     }
