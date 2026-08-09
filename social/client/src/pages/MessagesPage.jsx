@@ -1142,7 +1142,7 @@ export default function MessagesPage() {
           display: flex;
           align-items: center;
           gap: 12px;
-          padding: 18px 22px;
+          padding: 18px 10px 18px 14px;
           border-top: 1px solid ${C.line};
         }
         .ms-composer-input-wrap {
