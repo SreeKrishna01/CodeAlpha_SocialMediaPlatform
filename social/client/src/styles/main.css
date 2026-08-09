@@ -71,7 +71,7 @@ input, textarea {
   grid-template-columns: 108px minmax(0, 860px);
   justify-content: center;
   gap: 28px;
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 16px 24px 16px;
 }
