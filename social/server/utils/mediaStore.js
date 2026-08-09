@@ -57,11 +57,14 @@ async function saveDataUrl(dataUrl, subdir = 'posts') {
       resource_type: 'auto',
     });
 
+    console.log('CLOUDINARY URL:', result.secure_url);
+
     return result.secure_url;
+
   } catch (error) {
-  console.log("CLOUDINARY URL:", result.secure_url);
-  return result.secure_url;
-}
+    console.error('Cloudinary upload error:', error);
+    throw error;
+  }
 }
 
 async function saveDataUrls(urls = [], subdir = 'posts') {
