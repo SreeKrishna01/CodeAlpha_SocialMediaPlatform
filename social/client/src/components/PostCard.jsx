@@ -127,37 +127,53 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
       {post.caption && <p className="post-caption">{post.caption}</p>}
 
       {images.length > 0 && (() => {
-        const isVideo = isVideoUrl(images[imgIndex]);
-        const mediaRatio = post.ratios?.[imgIndex] || (isVideo ? '9:16' : '1:1');
-        const adjust = post.adjusts?.[imgIndex] || null;
-        return (
-          <div
-            className={`post-media ${mediaRatio === '9:16' ? 'post-media--reel' : ''}`}
-            style={{ aspectRatio: RATIO_CSS[mediaRatio] || '1 / 1' }}
-          >
-            {isVideo ? (
-              <AutoPlayVideo
-    src={images[imgIndex]}
-    controls
-    className="post-video"
-    adjust={adjust}
-  />
-            ) : (
-             <img
-  src={images[imgIndex]}
-  alt=""
-/>
-            )}
-            {images.length > 1 && (
-              <div className="media-nav">
-                {images.map((_, i) => (
-                  <span key={i} className={`media-dot ${i === imgIndex ? 'active' : ''}`} onClick={() => setImgIndex(i)} />
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })()}
+  const isVideo = isVideoUrl(images[imgIndex]);
+  const mediaRatio =
+    post.ratios?.[imgIndex] || (isVideo ? '9:16' : '1:1');
+  const adjust = post.adjusts?.[imgIndex] || null;
+
+  return (
+    <div
+      className={`post-media ${
+        mediaRatio === '9:16' ? 'post-media--reel' : ''
+      }`}
+      style={{
+        aspectRatio: RATIO_CSS[mediaRatio] || '1 / 1',
+      }}
+    >
+      {isVideo ? (
+        <AutoPlayVideo
+          src={images[imgIndex]}
+          controls
+          className="post-video"
+          adjust={adjust}
+        />
+      ) : (
+        <img
+          src={images[imgIndex]}
+          alt=""
+          onError={(e) => {
+            console.error('IMAGE LOAD FAILED:', images[imgIndex]);
+          }}
+        />
+      )}
+
+      {images.length > 1 && (
+        <div className="media-nav">
+          {images.map((_, i) => (
+            <span
+              key={i}
+              className={`media-dot ${
+                i === imgIndex ? 'active' : ''
+              }`}
+              onClick={() => setImgIndex(i)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+})()}
 
       <div className="post-actions">
         <div className="actions-left">
