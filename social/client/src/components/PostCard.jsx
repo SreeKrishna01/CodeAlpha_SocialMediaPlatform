@@ -136,10 +136,15 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
             style={{ aspectRatio: RATIO_CSS[mediaRatio] || '1 / 1' }}
           >
             {isVideo ? (
-              <AutoPlayVideo src={images[imgIndex]} controls className="post-video" adjust={adjust} />
+              <AutoPlayVideo
+    src={images[imgIndex]}
+    controls
+    className="post-video"
+    adjust={adjust}
+  />
             ) : (
-              <img
-  src={`${import.meta.env.VITE_API_URL}${images[imgIndex]}`}
+             <img
+  src={images[imgIndex]}
   alt=""
 />
             )}
