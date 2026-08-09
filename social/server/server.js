@@ -21,7 +21,7 @@ connectDB();
 
 const allowedOrigins = [
   'https://kek-start.vercel.app',
-  'https://kek-start-9tp1ra83x-sreekrishna01s-projects.vercel.app'
+   'https://kek-start-70xufgjig-sreekrishna01s-projects.vercel.app'
 ];
 
 app.use(cors({
