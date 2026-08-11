@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import CommentSheet from '../components/CommentSheet.jsx';
 import AutoPlayVideo from '../components/AutoPlayVideo.jsx';
 import ShareSheet from '../components/ShareSheet.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function timeAgo(dateStr) {
   const diff = Math.max(1, Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000));
