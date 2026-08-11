@@ -124,8 +124,10 @@ function ReelCard({ post, isActive, saved = false }) {
 
       <div className="reel-bottom">
         <div className="reel-author">
-          <img src={post.author?.avatar} alt="" className="reel-author-img" />
-          <span className="reel-author-name">
+           <div onClick={() => navigate(`/profile/${post.author?.username}`)}>
+             <img src={post.author?.avatar} alt="" className="reel-author-img" />
+           </div>
+          <span className="reel-author-name"  onClick={() => navigate(`/profile/${post.author?.username}`)}>
             {post.author?.name}
             {post.author?.verified && <BadgeCheck size={14} fill="#3897f0" color="#fff" />}
           </span>
