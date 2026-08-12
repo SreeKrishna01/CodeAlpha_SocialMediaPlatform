@@ -16,6 +16,7 @@ function timeAgo(dateStr) {
 
 function ReelCard({ post, isActive, saved = false }) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(post.likes?.some((l) => l._id === user?.id || l === user?.id));
   const [likesCount, setLikesCount] = useState(post.likes?.length || 0);
   const [comments, setComments] = useState(post.comments || []);
