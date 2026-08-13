@@ -682,13 +682,20 @@ export default function MessagesPage() {
 
       <style>{`
         /* ---------- BASE ---------- */
-        .ms-app {
+       .ms-app {
           display: grid;
           grid-template-columns: 320px minmax(0, 1fr) 360px;
           gap: 20px;
-          height: calc(100vh - 48px);
+          height: calc(100vh - 32px);
+          height: calc(100dvh - 32px);
           font-family: 'Manrope', -apple-system, 'Inter', sans-serif;
           color: ${C.ink};
+        }
+        @media (max-width: 900px) {
+          .ms-app {
+            height: calc(100vh - 12px - 90px - env(safe-area-inset-bottom, 0px));
+            height: calc(100dvh - 12px - 90px - env(safe-area-inset-bottom, 0px));
+          }
         }
         .ms-col {
           background: ${C.card};
