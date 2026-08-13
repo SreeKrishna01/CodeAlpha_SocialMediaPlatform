@@ -349,8 +349,8 @@ export default function ExplorePage() {
         .explore-loading { padding: 20px 0; }
 
         @media (max-width: 900px) {
-          .reel-bottom { bottom: calc(10px + 84px + env(safe-area-inset-bottom, 0px)); }
-          .reel-sidebar { bottom: calc(160px + 84px + env(safe-area-inset-bottom, 0px)); }
+          .reel-bottom { bottom: calc(24px + 40px + env(safe-area-inset-bottom, 0px)); }
+          .reel-sidebar { bottom: calc(160px + 40px + env(safe-area-inset-bottom, 0px)); }
         }
       `}</style>
     </div>
