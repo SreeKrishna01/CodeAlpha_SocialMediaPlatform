@@ -699,7 +699,7 @@ export default function MessagesPage() {
         }
         .ms-col {
           background: ${C.card};
-          border-radius: 24px;
+          border-radius: 18px;
           box-shadow: 0 10px 40px rgba(0,0,0,0.05);
           overflow: hidden;
         }
