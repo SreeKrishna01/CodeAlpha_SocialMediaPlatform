@@ -10,8 +10,6 @@ import { useNotifications } from '../context/NotificationContext.jsx';
 import * as api from '../api';
 import PostCard from '../components/PostCard.jsx';
 
-const textInputRef = useRef();
-
 const C = {
   bg: '#F6F7FB',
   card: '#FFFFFF',
@@ -275,6 +273,7 @@ function ChatThread({ user, otherUser, onBack, onOpenProfile, force = false }) {
   const bottomRef = useRef();
   const fileRef = useRef();
   const cameraRef = useRef();
+  const textInputRef = useRef();
   const { pushToast } = useNotifications();
   const uid = otherUser?.id || otherUser?._id;
 
