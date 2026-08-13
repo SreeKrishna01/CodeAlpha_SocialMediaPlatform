@@ -295,7 +295,7 @@ export default function ExplorePage() {
         .reel-action.liked { color: #ff3b5c; }
         .reel-bottom {
           position: absolute;
-          bottom: 24px;
+          bottom: 10px;
           left: 16px;
           right: 70px;
           z-index: 10;
