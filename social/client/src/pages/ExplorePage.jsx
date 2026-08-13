@@ -219,7 +219,8 @@ export default function ExplorePage() {
         .reels-container { display: flex; flex-direction: column; }
         .reel-card {
           scroll-snap-align: start;
-          height: calc(100vh - 48px);
+          height: 100vh;
+          height: 100dvh;
           position: relative;
           overflow: hidden;
           background: #000;
@@ -345,6 +346,12 @@ export default function ExplorePage() {
           max-height: 60vh;
         }
         .explore-loading { padding: 20px 0; }
+        .explore-loading { padding: 20px 0; }
+
+        @media (max-width: 900px) {
+          .reel-bottom { bottom: calc(24px + 84px + env(safe-area-inset-bottom, 0px)); }
+          .reel-sidebar { bottom: calc(160px + 84px + env(safe-area-inset-bottom, 0px)); }
+        }
       `}</style>
     </div>
   );
