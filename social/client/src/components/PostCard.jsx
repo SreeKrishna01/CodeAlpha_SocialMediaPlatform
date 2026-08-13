@@ -308,7 +308,7 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
           position: relative;
           overflow: hidden;
           margin-bottom: 12px;
-          background: var(--surface-soft);
+          background: #fff;
         }
         .post-media--reel {
           background: #000;
