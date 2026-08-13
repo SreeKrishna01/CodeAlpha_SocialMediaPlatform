@@ -8,11 +8,11 @@ const RATIO_DIMS = {
   '9:16': [1080, 1920],
 };
 
-const RATIO_DIMS = {
-  'original': null,
-  '1:1': [1080, 1080],
-  '4:5': [1080, 1350],
-  '9:16': [1080, 1920],
+const RATIO_ASPECT = {
+  original: 'auto',
+  '1:1': '1 / 1',
+  '4:5': '4 / 5',
+  '9:16': '9 / 16',
 };
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
