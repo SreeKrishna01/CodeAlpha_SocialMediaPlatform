@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import CommentSheet from './CommentSheet.jsx';
 import AutoPlayVideo from './AutoPlayVideo.jsx';
 import ShareSheet from './ShareSheet.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function timeAgo(dateStr) {
   const diff = Math.max(1, Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000));
@@ -28,6 +29,7 @@ function isVideoUrl(url) {
 
 export default function PostCard({ post, onDelete, saved = false, onSavedChange }) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(post.likes?.some((l) => l._id === user?.id || l === user?.id));
   const [likesCount, setLikesCount] = useState(post.likes?.length || 0);
   const [comments, setComments] = useState(post.comments || []);
@@ -90,7 +92,7 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
 
   return (
     <article className="post-card">
-      <div className="post-head">
+      <div className="post-head"  onClick={() => navigate(`/profile/${post.author?.username}`)}>
         <div className="post-author">
           <img className="author-avatar" src={post.author?.avatar} alt={post.author?.name} />
           <div>
