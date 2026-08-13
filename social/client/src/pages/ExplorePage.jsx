@@ -198,12 +198,19 @@ export default function ExplorePage() {
       </div>
 
       <style>{`
-        .explore-page {
-          height: calc(100vh - 48px);
+       .explore-page {
+          height: 100vh;
+          height: 100dvh;
           overflow-y: scroll;
           scroll-snap-type: y mandatory;
           scrollbar-width: none;
           position: relative;
+          margin: -16px -24px;
+        }
+        @media (max-width: 900px) {
+          .explore-page {
+            margin: -12px -12px calc(-90px - env(safe-area-inset-bottom, 0px));
+          }
         }
         .explore-page::-webkit-scrollbar { display: none; }
         
