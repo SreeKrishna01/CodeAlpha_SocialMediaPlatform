@@ -88,7 +88,12 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
   if (deleted) return null;
 
   const images = post.images?.length ? post.images : [];
-  const RATIO_CSS = { '9:16': '9 / 16', '4:5': '4 / 5', '1:1': '1 / 1' };
+  const RATIO_CSS = {
+  original: 'auto',
+  '9:16': '9 / 16',
+  '4:5': '4 / 5',
+  '1:1': '1 / 1',
+};
 
   return (
     <article className="post-card">
@@ -131,17 +136,21 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
       {images.length > 0 && (() => {
   const isVideo = isVideoUrl(images[imgIndex]);
   const mediaRatio =
-    post.ratios?.[imgIndex] || (isVideo ? '9:16' : '1:1');
+  post.ratios?.[imgIndex] || (isVideo ? '9:16' : 'original');
   const adjust = post.adjusts?.[imgIndex] || null;
 
   return (
     <div
-      className={`post-media ${
-        mediaRatio === '9:16' ? 'post-media--reel' : ''
-      }`}
-      style={{
-        aspectRatio: RATIO_CSS[mediaRatio] || '1 / 1',
-      }}
+  className={`post-media ${
+    mediaRatio === '9:16' ? 'post-media--reel' : ''
+  }`}
+  style={
+    mediaRatio === 'original'
+      ? undefined
+      : {
+          aspectRatio: RATIO_CSS[mediaRatio] || '1 / 1',
+        }
+      }
     >
       {isVideo ? (
         <AutoPlayVideo
@@ -307,7 +316,12 @@ export default function PostCard({ post, onDelete, saved = false, onSavedChange 
           margin-right: auto;
           max-width: min(100%, 46vh);
         }
-        .post-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .post-media img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
         .post-media .post-video { width: 100%; height: 100%; object-fit: cover; display: block; background: #000; }
         .media-nav {
           position: absolute;
