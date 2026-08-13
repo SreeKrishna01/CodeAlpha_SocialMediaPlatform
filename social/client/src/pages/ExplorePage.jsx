@@ -216,7 +216,7 @@ export default function ExplorePage() {
         
        
         .reel-counter { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 600; }
-        .reels-container { display: flex; flex-direction: column; }
+        .reels-container { display: flex; flex-direction: column; border-bottom: 1px solid grey; }
         .reel-card {
           scroll-snap-align: start;
           height: 100vh;
