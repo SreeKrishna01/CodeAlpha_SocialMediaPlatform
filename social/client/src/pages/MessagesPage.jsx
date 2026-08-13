@@ -10,6 +10,8 @@ import { useNotifications } from '../context/NotificationContext.jsx';
 import * as api from '../api';
 import PostCard from '../components/PostCard.jsx';
 
+const textInputRef = useRef();
+
 const C = {
   bg: '#F6F7FB',
   card: '#FFFFFF',
@@ -347,7 +349,11 @@ function ChatThread({ user, otherUser, onBack, onOpenProfile, force = false }) {
       const { message } = await api.sendMessage(uid, payload);
       setMessages((prev) => [...prev, message]);
       setText('');
-      setPendingAttachments([]);
+setPendingAttachments([]);
+// Dismiss the mobile keyboard now that the message has sent
+requestAnimationFrame(() => {
+  textInputRef.current?.blur();
+});
       pushToast({
         name: 'You',
         avatar: user?.avatar,
@@ -468,11 +474,13 @@ function ChatThread({ user, otherUser, onBack, onOpenProfile, force = false }) {
 
         <div className="ms-composer-input-wrap">
           <button type="button" className="ms-composer-icon" onClick={() => cameraRef.current?.click()} title="Camera"><Camera size={19} /></button>
-          <input
-            placeholder="Write Something..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+         <input
+  ref={textInputRef}
+  placeholder="Write Something..."
+  value={text}
+  onChange={(e) => setText(e.target.value)}
+  enterKeyHint="send"
+/>
           <button type="button" className="ms-composer-icon" onClick={() => fileRef.current?.click()} title="Attach"><Paperclip size={19} /></button>
           <button type="button" className="ms-composer-icon"><Mic size={19} /></button>
           <button type="button" className="ms-composer-icon"><Smile size={19} /></button>
