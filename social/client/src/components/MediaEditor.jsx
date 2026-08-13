@@ -1,20 +1,31 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { X, Check, RefreshCw } from 'lucide-react';
 
-const RATIO_DIMS = { '1:1': [1080, 1080], '4:5': [1080, 1350], '9:16': [1080, 1920] };
-const RATIO_ASPECT = { '1:1': '1 / 1', '4:5': '4 / 5', '9:16': '9 / 16' };
+const RATIO_DIMS = {
+  'original': null,
+  '1:1': [1080, 1080],
+  '4:5': [1080, 1350],
+  '9:16': [1080, 1920],
+};
+
+const RATIO_DIMS = {
+  'original': null,
+  '1:1': [1080, 1080],
+  '4:5': [1080, 1350],
+  '9:16': [1080, 1920],
+};
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 export default function MediaEditor({ media, onConfirm, onCancel }) {
   const isVideo = media.isVideo;
-  const [ratio, setRatio] = useState(isVideo ? '9:16' : '1:1');
+  const [ratio, setRatio] = useState(isVideo ? '9:16' : 'original');
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const stageRef = useRef(null);
   const dragRef = useRef(null);
 
-  const ratios = isVideo ? ['9:16'] : ['1:1', '4:5'];
+  const ratios = isVideo ? ['9:16'] : ['original', '1:1', '4:5'];
 
   const setZoomAt = useCallback((nextZoom, cursorX, cursorY) => {
     const nz = clamp(nextZoom, 1, 4);
@@ -101,34 +112,72 @@ export default function MediaEditor({ media, onConfirm, onCancel }) {
   };
 
   const handleConfirm = () => {
-    if (isVideo) {
-      onConfirm({ data: media.data, ratio, adjust: { zoom, x: pan.x, y: pan.y }, isVideo: true });
+  if (isVideo) {
+    onConfirm({
+      data: media.data,
+      ratio,
+      adjust: { zoom, x: pan.x, y: pan.y },
+      isVideo: true,
+    });
+
+    return;
+  }
+
+  const img = new Image();
+
+  img.onload = () => {
+    if (zoom === 1 && pan.x === 0 && pan.y === 0) {
+      onConfirm({
+        data: media.data,
+        ratio,
+        adjust: null,
+        isVideo: false,
+      });
+
       return;
     }
-    const img = new Image();
-    img.onload = () => {
-      const [outW, outH] = RATIO_DIMS[ratio];
-      const iw = img.naturalWidth;
-      const ih = img.naturalHeight;
-      const coverScale = Math.max(iw / outW, ih / outH);
-      const sw0 = outW * coverScale;
-      const sh0 = outH * coverScale;
-      const sw = sw0 / zoom;
-      const sh = sh0 / zoom;
-      const cx = (iw - sw0) / 2 + (pan.x * (sw0 - sw)) / 2;
-      const cy = (ih - sh0) / 2 + (pan.y * (sh0 - sh)) / 2;
-      const sx = clamp(cx - sw / 2, 0, iw - sw);
-      const sy = clamp(cy - sh / 2, 0, ih - sh);
-      const canvas = document.createElement('canvas');
-      canvas.width = outW;
-      canvas.height = outH;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
-      onConfirm({ data: canvas.toDataURL('image/jpeg', 0.9), ratio, adjust: null, isVideo: false });
-    };
-    img.src = media.data;
+
+    const canvas = document.createElement('canvas');
+
+    const scale = zoom;
+
+    const width = img.naturalWidth;
+    const height = img.naturalHeight;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d');
+
+    const drawWidth = width / scale;
+    const drawHeight = height / scale;
+
+    const sx = (width - drawWidth) / 2 - pan.x * (width - drawWidth) / 2;
+    const sy = (height - drawHeight) / 2 - pan.y * (height - drawHeight) / 2;
+
+    ctx.drawImage(
+      img,
+      sx,
+      sy,
+      drawWidth,
+      drawHeight,
+      0,
+      0,
+      width,
+      height
+    );
+
+    onConfirm({
+      data: canvas.toDataURL('image/jpeg', 0.9),
+      ratio,
+      adjust: null,
+      isVideo: false,
+    });
   };
 
+  img.src = media.data;
+};
+  
   const transform = `translate(${pan.x * 50 * (zoom - 1)}%, ${pan.y * 50 * (zoom - 1)}%) scale(${zoom})`;
 
   return (
@@ -157,7 +206,12 @@ export default function MediaEditor({ media, onConfirm, onCancel }) {
         <div
           className="me-stage"
           ref={stageRef}
-          style={{ aspectRatio: RATIO_ASPECT[ratio] }}
+           style={{
+            aspectRatio:
+                ratio === 'original'
+                ? `${media.naturalWidth || 1} / ${media.naturalHeight || 1}`
+            : RATIO_ASPECT[ratio],
+          }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -240,7 +294,7 @@ export default function MediaEditor({ media, onConfirm, onCancel }) {
         .me-stage img, .me-stage video {
           position: absolute; inset: 0;
           width: 100%; height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           transform-origin: center;
           pointer-events: none;
         }
