@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Volume2, VolumeX, ChevronLeft, ChevronRight, MoreHorizontal, Trash2, Send } from 'lucide-react';
+import { X, Volume2, VolumeX, ChevronLeft, ChevronRight, MoreHorizontal, Trash2, Send, Loader2 } from 'lucide-react';
 import * as api from '../api';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -31,6 +31,12 @@ export default function StoryViewer({ stories = [], initialAuthorId, onClose, on
   const [muted, setMuted] = useState(false);
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [mediaLoading, setMediaLoadingState] = useState(true);
+  const mediaLoadingRef = useRef(true);
+  const setMediaLoading = (val) => {
+    mediaLoadingRef.current = val;
+    setMediaLoadingState(val);
+  };
   const [showMenu, setShowMenu] = useState(false);
   const [replyText, setReplyText] = useState('');
   const videoRef = useRef(null);
@@ -76,18 +82,20 @@ export default function StoryViewer({ stories = [], initialAuthorId, onClose, on
     }
   }, [group, grouped, authorIdx, storyIdx, goTo]);
 
-  useEffect(() => {
-    if (!story) return;
-    markViewed(story);
-    setProgress(0);
+useEffect(() => {
+  if (!story) return;
+  markViewed(story);
+  setProgress(0);
+  setMediaLoading(true);
 
-    if (story.mediaType === 'video') {
-      return;
-    }
+  if (story.mediaType === 'video') {
+    return;
+  }
 
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      if (paused) return;
+  clearInterval(timerRef.current);
+  timerRef.current = setInterval(() => {
+    if (paused || mediaLoadingRef.current) return;  
+
       setProgress((p) => {
         const nextP = p + 100;
         if (nextP >= IMAGE_DURATION) {
@@ -199,19 +207,22 @@ export default function StoryViewer({ stories = [], initialAuthorId, onClose, on
           onTouchEnd={handleTouchEnd}
         >
           {isVideo ? (
-            <video
-              ref={videoRef}
-              src={story.image}
-              autoPlay
-              playsInline
-              muted={muted}
-              onEnded={handleVideoEnded}
-              onTimeUpdate={handleVideoTime}
-              onClick={(e) => e.stopPropagation()}
-            />
-          ) : (
-            <img src={story.image} alt="" />
-          )}
+  <video
+    ref={videoRef}
+    src={story.image}
+    autoPlay
+    playsInline
+    muted={muted}
+    onEnded={handleVideoEnded}
+    onTimeUpdate={handleVideoTime}
+    onLoadedData={() => setMediaLoading(false)}
+    onWaiting={() => setMediaLoading(true)}
+    onPlaying={() => setMediaLoading(false)}
+    onClick={(e) => e.stopPropagation()}
+  />
+) : (
+  <img src={story.image} alt="" onLoad={() => setMediaLoading(false)} />
+)}
           <div className="sv-shade" />
         </div>
 
@@ -222,8 +233,13 @@ export default function StoryViewer({ stories = [], initialAuthorId, onClose, on
           <ChevronRight size={22} />
         </div>
 
-        <div className="sv-header">
-          <div className="sv-progress-row">
+   <div className="sv-header">
+        {mediaLoading && (
+          <div className="sv-top-loader">
+            <Loader2 size={20} className="spin" color="#fff" />
+          </div>
+        )}
+     <div className="sv-progress-row">
             {group.stories.map((s, i) => (
               <span key={s._id} className="sv-progress-track">
                 <span
@@ -353,6 +369,18 @@ export default function StoryViewer({ stories = [], initialAuthorId, onClose, on
           right: 0;
           padding: 14px 12px 0;
           z-index: 10;
+        }
+        .sv-top-loader {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 8px;
+        }
+        .sv-top-loader .spin {
+          animation: sv-spin 0.8s linear infinite;
+        }
+        @keyframes sv-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
         .sv-progress-row {
           display: flex;
