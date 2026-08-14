@@ -4,11 +4,13 @@ import {
   ArrowLeft, LogOut, User, Bell, Shield, Moon, Globe, HelpCircle,
   ChevronRight, Palette, Lock, Eye, RefreshCw, Trash2, Camera
 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import * as api from '../api';
 
 export default function SettingsPage() {
   const { user, setUser, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const avatarRef = useRef();
   const [editing, setEditing] = useState(false);
@@ -72,7 +74,7 @@ export default function SettingsPage() {
         { icon: Bell, label: 'Notifications', onClick: () => navigate('/alerts') },
         { icon: Palette, label: 'Appearance', onClick: () => {} },
         { icon: Globe, label: 'Language', sub: 'English', onClick: () => {} },
-        { icon: Moon, label: 'Dark Mode', sub: 'Off', onClick: () => {} },
+        { icon: Moon, label: 'Dark Mode', sub: isDark ? 'On' : 'Off', onClick: toggleTheme },
       ],
     },
     {
