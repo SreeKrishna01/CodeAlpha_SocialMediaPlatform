@@ -5,6 +5,7 @@ import {
   Pencil, LogOut, RefreshCw, Lock, Bell, Palette, Globe, Moon, Eye, Shield, HelpCircle, Trash2, ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useTheme } from '../context/ThemeContext.jsx';
 import { useNotifications } from '../context/NotificationContext.jsx';
 import * as api from '../api';
 import PostCard from '../components/PostCard.jsx';
@@ -25,6 +26,7 @@ function Toggle({ on, onChange }) {
 export default function ProfilePage() {
   const { username } = useParams();
   const { user: me, setUser, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const { pushToast } = useNotifications();
   const navigate = useNavigate();
   const avatarRef = useRef();
@@ -353,10 +355,10 @@ export default function ProfilePage() {
                   <span className="settings-row-ic"><Globe size={17} /></span> Language
                   <span className="settings-row-val">English</span><ChevronRight size={15} />
                 </button>
-                <button className="settings-row">
-                  <span className="settings-row-ic"><Moon size={17} /></span> Dark Mode
-                  <span className="settings-row-val">Off</span><ChevronRight size={15} />
-                </button>
+              <button className="settings-row" onClick={toggleTheme}>
+                <span className="settings-row-ic"><Moon size={17} /></span> Dark Mode
+                <span className="settings-row-val">{isDark ? 'On' : 'Off'}</span><ChevronRight size={15} />
+              </button>
                 <button className="settings-row">
                   <span className="settings-row-ic"><Shield size={17} /></span> Privacy Settings <ChevronRight size={15} />
                 </button>
