@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Volume2, VolumeX, ChevronLeft, ChevronRight, MoreHorizontal, Trash2, Send, Loader2 } from 'lucide-react';
+import { X, Volume2, VolumeX, ChevronLeft, ChevronRight, MoreHorizontal, Trash2, Send } from 'lucide-react';
 import * as api from '../api';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -31,12 +31,6 @@ export default function StoryViewer({ stories = [], initialAuthorId, onClose, on
   const [muted, setMuted] = useState(false);
   const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [mediaLoading, setMediaLoadingState] = useState(true);
-  const mediaLoadingRef = useRef(true);
-  const setMediaLoading = (val) => {
-    mediaLoadingRef.current = val;
-    setMediaLoadingState(val);
-  };
   const [showMenu, setShowMenu] = useState(false);
   const [replyText, setReplyText] = useState('');
   const videoRef = useRef(null);
@@ -86,7 +80,6 @@ useEffect(() => {
   if (!story) return;
   markViewed(story);
   setProgress(0);
-  setMediaLoading(true);
 
   if (story.mediaType === 'video') {
     return;
@@ -94,8 +87,7 @@ useEffect(() => {
 
   clearInterval(timerRef.current);
   timerRef.current = setInterval(() => {
-    if (paused || mediaLoadingRef.current) return;  
-
+    if (paused) return;
       setProgress((p) => {
         const nextP = p + 100;
         if (nextP >= IMAGE_DURATION) {
@@ -215,13 +207,10 @@ useEffect(() => {
     muted={muted}
     onEnded={handleVideoEnded}
     onTimeUpdate={handleVideoTime}
-    onLoadedData={() => setMediaLoading(false)}
-    onWaiting={() => setMediaLoading(true)}
-    onPlaying={() => setMediaLoading(false)}
     onClick={(e) => e.stopPropagation()}
   />
 ) : (
-  <img src={story.image} alt="" onLoad={() => setMediaLoading(false)} />
+  <img src={story.image} alt="" />
 )}
           <div className="sv-shade" />
         </div>
@@ -233,13 +222,8 @@ useEffect(() => {
           <ChevronRight size={22} />
         </div>
 
-   <div className="sv-header">
-        {mediaLoading && (
-          <div className="sv-top-loader">
-            <Loader2 size={20} className="spin" color="#fff" />
-          </div>
-        )}
-     <div className="sv-progress-row">
+  <div className="sv-header">
+  <div className="sv-progress-row">
             {group.stories.map((s, i) => (
               <span key={s._id} className="sv-progress-track">
                 <span
@@ -362,38 +346,27 @@ useEffect(() => {
         }
         .sv-prev { left: 8px; }
         .sv-next { right: 8px; }
-        .sv-header {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          padding: 14px 12px 0;
-          z-index: 10;
-        }
-        .sv-top-loader {
-          display: flex;
-          justify-content: center;
-          margin-bottom: 8px;
-        }
-        .sv-top-loader .spin {
-          animation: sv-spin 0.8s linear infinite;
-        }
-        @keyframes sv-spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
+       .sv-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 12px 0;
+  z-index: 10;
+}
         .sv-progress-row {
           display: flex;
           gap: 4px;
           margin-bottom: 12px;
         }
-        .sv-progress-track {
-          flex: 1;
-          height: 3px;
-          border-radius: 3px;
-          background: rgba(255,255,255,0.3);
-          overflow: hidden;
-        }
+       .sv-progress-track {
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.4);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
         .sv-progress-fill {
           display: block;
           height: 100%;
