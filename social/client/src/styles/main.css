@@ -21,6 +21,25 @@
   --font-body: 'Manrope', -apple-system, sans-serif;
 }
 
+[data-theme='dark'] {
+  --bg: #14121e;
+  --surface: #1e1c2b;
+  --surface-soft: #262436;
+  --ink: #f2f0fb;
+  --ink-soft: #b6b3cc;
+  --ink-faint: #7d7a96;
+  --border: #322f45;
+  --accent-purple-soft: #2c2745;
+  --shadow-soft: 0 10px 30px -12px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 4px 20px -6px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme='dark'] body {
+  background-image:
+    radial-gradient(circle at 8% 0%, rgba(255, 122, 89, 0.06), transparent 45%),
+    radial-gradient(circle at 95% 10%, rgba(139, 107, 255, 0.10), transparent 40%);
+}
+
 * { box-sizing: border-box; }
 
 html, body, #root {
