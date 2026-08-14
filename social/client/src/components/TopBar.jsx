@@ -74,7 +74,7 @@ export default function TopBar() {
           background: url('https://c4.wallpaperflare.com/wallpaper/391/562/489/net-background-surface-dark-wallpaper-preview.jpg');
           -webkit-background-clip: text;
           color: transparent;
-          border: 1px ridge #a5a2ba;
+          -webkit-text-stroke: 1px #d9d3de;
           animation: animate 80s linear infinite;
         }
         @keyframes animate {
